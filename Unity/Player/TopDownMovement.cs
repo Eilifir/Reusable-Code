@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 //Quick disclaimer all of the values are selected at random, feel free to tune them to your heart's content
 //Also your player need to have the components listed in References + an empty GameObject called "attackPoint"
 public class TopDownMovement : MonoBehaviour
@@ -46,6 +47,8 @@ public class TopDownMovement : MonoBehaviour
     
     void Update()
     {
+        if (currentHealth <= 0)
+            Death();
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
         input = new Vector2(horizontal, vertical).normalized;
@@ -83,6 +86,16 @@ public class TopDownMovement : MonoBehaviour
             rb.linearVelocity = currentSpeed * input;
         else
             rb.linearVelocity = Vector2.zero;
+    }
+    
+    void Death()
+    {
+        anim.SetBool("IsDead", true);
+    }
+    
+    void OnDeathAnimationFinishes()    //this is triggered via the animation controller
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
     
     void TakeDamage(float amount)
