@@ -23,7 +23,7 @@ public class TopDownMovement : MonoBehaviour
     [SerializeField] float currentStamina;
     //----------------Attack Variables----------------
     bool canAttack = true;
-    bool isAttacking = false;
+    bool isAttacking = false;            //this reverts to false when the animation finishes
     [SerializeField] float atkDamage = 2.0f;
     [SerializeField] float attackDelay = 1.0f;
     float attackTimer;
@@ -79,7 +79,10 @@ public class TopDownMovement : MonoBehaviour
                 }
             currentSpeed = walkSpeed;
         }
-        rb.linearVelocity = currentSpeed * input;
+        if(!isAttacking)
+            rb.linearVelocity = currentSpeed * input;
+        else
+            rb.linearVelocity = Vector2.zero;
     }
     
     void TakeDamage(float amount)
@@ -89,6 +92,7 @@ public class TopDownMovement : MonoBehaviour
     
     void Attack()
     {
+        isAttacking = true;
         Collider2D[] enemiesHit = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayer);
         foreach (Collider2D enemy in enemiesHit)
         {
@@ -96,12 +100,12 @@ public class TopDownMovement : MonoBehaviour
               enemyHandler.TakeDamage(atkDamage);
         }   
     }
-    //Here it can get messy (i'm not the best at animations) but basically i have an animation tree with idle/walk/run animations in 8 directions with moveX and moveY to see where the player is moving in a
+    //Here it can get messy (i'm not the best at animations) but basically i have an animation tree with idle/walk/run/attack animations in 8 directions with moveX and moveY to see where the player is moving in a
     //cartesian plane, and two boolens to see if it's moving and running.
     void UpdateAnimations()
     {
         isMoving = input.sqrMagnitude > 0.001f;
-        if (isMoving)
+        if (isMoving && !isAttacking)
         {
         lastX = input.x;
         lastY = input.y;
@@ -109,6 +113,7 @@ public class TopDownMovement : MonoBehaviour
         bool runningAnim = isMoving && isRuning;
         anim.SetBool("IsMoving", isMoving);
         anim.SetBool("IsRunning", runningAnim);
+        anim.SetBool("IsAttacking", isAttacking);
         anim.SetFloat("MoveX", lastX);
         anim.SetFloat("MoveY", lastY);
     }
