@@ -50,7 +50,7 @@ public class TopDownMovement : MonoBehaviour
         float vertical = Input.GetAxisRaw("Vertical");
         input = new Vector2(horizontal, vertical).normalized;
         isRuning = Input.GetKey(runKey);
-        if (attackTimer > 0f)
+        if (attackTimer > 0f && !isAttacking)
             attackTimer -= Time.deltaTime;
          if(attackTimer <= 0f)
           {
