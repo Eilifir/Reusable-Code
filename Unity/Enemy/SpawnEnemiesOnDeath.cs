@@ -12,7 +12,7 @@ public class SpawnEnemiesOnDeath : MonoBehaviour
     }
     private void OnDestroy()
     {
-        GameObject enemySpawned = Instantiate(miniSlimes, transform.position, Quaternion.identity);
+        GameObject enemySpawned = Instantiate(enemyToSpawn, transform.position, Quaternion.identity);
         EnemyHandler enemySpawned = enemySpawned.GetComponent<EnemyHandler>();
         slimeOneScript.currentWaypoint =  mainScript.currentWaypoint;
     }
