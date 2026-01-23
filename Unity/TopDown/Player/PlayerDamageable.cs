@@ -11,13 +11,12 @@ public class PlayerDamageable : Damageable
     }
     protected override void OnDamaged(float amount)
     {
-        if (anim) anim.SetTrigger("Hit"); // optional
+        if (anim) anim.SetTrigger("Hit"); 
     }
     protected override void OnDeath()
     {
         if (anim) anim.SetTrigger("Death");
 
-        // Disable gameplay scripts
         for (int i = 0; i < disableOnDeath.Length; i++)
             if (disableOnDeath[i]) disableOnDeath[i].enabled = false;
     }
